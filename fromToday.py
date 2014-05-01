@@ -9,73 +9,53 @@ from dateutil.relativedelta import *
 
 EXC_INT = Exception("Date interpretation")
 
-def input(s):
+def _dateAdd(s, reldate):
     m = re.match(r'(\d+) d', s)
     if m:
-        dateAdd = relativedelta(days=int(m.group(1)))
+        return reldate+relativedelta(days=int(m.group(1)))
     m = re.match(r'(\d+) y', s)
     if m:
-        dateAdd = relativedelta(years=int(m.group(1)))
+        return reldate+relativedelta(years=int(m.group(1)))
     m = re.match(r'^tod', s)
     if m:
-        dateAdd = relativedelta(days=0)
+        return reldate+relativedelta(days=0)
     m = re.match(r'^tom', s)
     if m:
-        dateAdd = relativedelta(days=1)
+        return reldate+relativedelta(days=1)
 
     # Weekdays
     m = re.match(r'^mon', s)
     if m:
-        dateAdd = relativedelta(weekday=MO)
+        return reldate+relativedelta(weekday=MO)
     m = re.match(r'^tue', s)
     if m:
-        dateAdd = relativedelta(weekday=TU)
+        return reldate+relativedelta(weekday=TU)
     m = re.match(r'^wed', s)
     if m:
-        dateAdd = relativedelta(weekday=WE)
+        return reldate+relativedelta(weekday=WE)
     m = re.match(r'^thu', s)
     if m:
-        dateAdd = relativedelta(weekday=TH)
+        return reldate+relativedelta(weekday=TH)
     m = re.match(r'^fri', s)
     if m:
-        dateAdd = relativedelta(weekday=FR)
+        return reldate+relativedelta(weekday=FR)
     m = re.match(r'^sat', s)
     if m:
-        dateAdd = relativedelta(weekday=SA)
+        return reldate+relativedelta(weekday=SA)
     m = re.match(r'^sun', s)
     if m:
-        dateAdd = relativedelta(weekday=SU)
+        return reldate+relativedelta(weekday=SU)
 
     # Next Weekdays
-    m = re.match(r'^next ', s)
+    m = re.match(r'^next (.+)', s)
     if m: 
-        dateAdd = relativedelta(days=7)
-        m = re.match(r'mon', s)
-        if m:
-            dateAdd += relativedelta(weekday=MO)
-        m = re.match(r'tue', s)
-        if m:
-            dateAdd = relativedelta(weekday=TU)
-        m = re.match(r'wed', s)
-        if m:
-            dateAdd = relativedelta(weekday=WE)
-        m = re.match(r'thu', s)
-        if m:
-            dateAdd = relativedelta(weekday=TH)
-        m = re.match(r'fri', s)
-        if m:
-            dateAdd = relativedelta(weekday=FR)
-        m = re.match(r'sat', s)
-        if m:
-            dateAdd = relativedelta(weekday=SA)
-        m = re.match(r'sun', s)
-        if m:
-            dateAdd = relativedelta(weekday=SU)
-        else:
-            raise EXC_INT
+        dateAdd = reldate+relativedelta(days=7)
+        return _dateAdd(m.group(1), dateAdd)
 
-    # 
-    print datetime.today()+dateAdd
+def input(s):
+
+    #print datetime.today()+_dateAdd(s)
+    print _dateAdd(s, datetime.today())
 
 
 
