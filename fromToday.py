@@ -9,6 +9,10 @@ from dateutil.relativedelta import *
 
 EXC_INT = Exception("Date interpretation")
 
+class Usage(Exception):
+    def __init__(self, msg):
+        self.msg = msg
+
 def _dateAdd(s, reldate):
     m = re.match(r'(\d+) d', s)
     if m:
@@ -58,5 +62,15 @@ def input(s):
     print _dateAdd(s, datetime.today())
 
 
+def main(argv=None):
+    if argv == None:
+        argv = sys.argv
+    try:
+        input(argv[1])
+    except Exception, msg:
+        print "Missing argument."
 
-input(sys.argv[1])
+if __name__ == "__main__":
+    sys.exit(main())
+
+
